@@ -21,6 +21,7 @@
 	import flash.media.Sound;
 	import org.as3wavsound.WavSound;
 	import org.as3wavsound.WavSoundChannel;
+	import flash.utils.ByteArray;
 	
 	
 
@@ -72,8 +73,9 @@
 			ExternalInterface.addCallback("jStartRecording", jStartRecording);
 			ExternalInterface.addCallback("jStopRecording", jStopRecording);
 			ExternalInterface.addCallback("jSendFileToServer", jSendFileToServer);
+			ExternalInterface.addCallback("jPauseRecording", jPauseRecording);
+			ExternalInterface.addCallback("jResumeRecording", jResumeRecording);
 
-			
 			
 		}
 
@@ -107,6 +109,18 @@
 			
 			//finalize_recording();
 			
+		}
+		
+		//external javascript function to trigger pause recording
+		public function jPauseRecording():void
+		{
+			recorder.pause();
+		}
+		
+		//external javascript function to trigger pause recording
+		public function jResumeRecording():void
+		{
+			recorder.resume();
 		}
 		
 		public function jSendFileToServer():void
@@ -199,16 +213,15 @@
             	var loader:URLLoader = new URLLoader();
 				loader.addEventListener(Event.COMPLETE, handleFinishedResponse);
 				loader.load(req);
-				
-			
 			}
 			
 		}
 		private function handleFinishedResponse(e:Event ):void{
 			var param:String = new String(e.target.data);
 			ExternalInterface.call("$.jRecorder.callback_finished_params", param);
-			ExternalInterface.call("$.jRecorder.callback_finished_sending", param);
+			//ExternalInterface.call("$.jRecorder.callback_finished_sending", param);
 		}
+		
 		
 		private function getFlashVars():Object {
 		return Object( LoaderInfo( this.loaderInfo ).parameters );

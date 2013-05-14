@@ -1,4 +1,4 @@
-package org.bytearray.micrecorder
+﻿package org.bytearray.micrecorder
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -135,6 +135,24 @@ package org.bytearray.micrecorder
 			_output = _encoder.encode(_buffer, 1);
 			
 			dispatchEvent( _completeEvent );
+		}
+		
+		/**
+		 * Pause recording the audio stream.
+		 */		
+		public function pause():void
+		{
+			_microphone.removeEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
+		}
+		
+		/**
+		 * Continue recording the audio stream.
+		 */		
+		public function resume():void
+		{
+			if ( _microphone == null )
+				_microphone = Microphone.getMicrophone();
+			_microphone.addEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
 		}
 		
 		/**
