@@ -166,14 +166,7 @@
 
 		private function recordComplete(e:Event):void
 		{
-			//fileReference.save(recorder.output, "recording.wav");
-			
-			
-			//finalize_recording();
-			
-			//preview_recording(); 
-			
-			
+			finalize_recording();
 		}
 		
 		private function preview_recording():void
@@ -190,7 +183,8 @@
 		//functioon send data to server
 		private function finalize_recording():void
 		{
-			
+			tts = new WavSound(recorder.output);
+			tts.play();
 			var _var1:String= '';
 			
 			var globalParam = LoaderInfo(this.root.loaderInfo).parameters;
@@ -209,6 +203,7 @@
             	req.contentType = 'application/octet-stream';
 				req.method = URLRequestMethod.POST;
 				req.data = recorder.output;
+				
 				
             	var loader:URLLoader = new URLLoader();
 				loader.addEventListener(Event.COMPLETE, handleFinishedResponse);
