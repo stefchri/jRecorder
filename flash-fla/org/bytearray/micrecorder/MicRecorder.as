@@ -7,6 +7,9 @@
 	import flash.media.Microphone;
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
+	import flash.external.ExternalInterface;
+	import flash.system.Security;
+	import flash.system.SecurityPanel;
 	
 	import org.bytearray.micrecorder.encoder.WaveEncoder;
 	import org.bytearray.micrecorder.events.RecordingEvent;
@@ -93,6 +96,10 @@
 		{
 			if ( _microphone == null )
 				_microphone = Microphone.getMicrophone();
+			if(_microphone.muted)
+			{
+				ExternalInterface.call("$.jRecorder.callback_muted");
+			}
 			 
 			_difference = getTimer();
 			
@@ -102,11 +109,16 @@
 			_buffer.length = 0;
 			
 			_microphone.addEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
-			_microphone.addEventListener(StatusEvent.STATUS, onStatus);
+			//_microphone.addEventListener(StatusEvent.STATUS, onStatus);
+			//Security.showSettings(SecurityPanel.PRIVACY);
 		}
 		
 		private function onStatus(event:StatusEvent):void
 		{
+			if (event.code == "Microphone.Muted") 
+			{ 
+				 Security.showSettings(SecurityPanel.PRIVACY); 
+			} 
 			_difference = getTimer();
 		}
 		
@@ -116,12 +128,14 @@
 		 */		
 		private function onSampleData(event:SampleDataEvent):void
 		{
-			_recordingEvent.time = getTimer() - _difference;
+			_recordingEvent.time = 9;//getTimer() - _difference;
 			
 			dispatchEvent( _recordingEvent );
 			
 			while(event.data.bytesAvailable > 0)
+			{
 				_buffer.writeFloat(event.data.readFloat());
+			}
 		}
 		
 		/**
@@ -153,6 +167,11 @@
 			if ( _microphone == null )
 				_microphone = Microphone.getMicrophone();
 			_microphone.addEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
+		}
+		
+		public function clearRecording():void
+		{
+			_output.clear();
 		}
 		
 		/**
