@@ -6,3 +6,7 @@ Project Documentation: http://www.sajithmr.me/jrecorder/
 Example Implementation: http://www.sajithmr.me/jrecorder/example1.html
 
 Author Domain: www.sajithmr.me
+
+Edited by Stefaan Christiaens for use with .NET MVC.
+Files adapted are in the fla folder. No changes have been made to the js in the repo. 
+You should well be able to add external requests to Flash and to JavaScript if using this library. 
